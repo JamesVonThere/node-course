@@ -4,7 +4,6 @@ let addTime=0;
 let doWork = function (job, timer, cb) {
     timer += addTime;
     addTime = timer;
-    console.log(addTime)
   setTimeout(() => {
     let dt = new Date();
     let result = `完成工作: ${job} at ${dt.toISOString()}`;
