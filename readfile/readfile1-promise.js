@@ -1,7 +1,7 @@
 const fs = require('fs');
 
-fs.readFile('test.txt', 'utf-8', (err, data) => {
 let p = new Promise((resolve, reject) => {
+    fs.readFile('test.txt', 'utf-8', (err, data) => {
     if(err){
         reject(err);
     }else{
@@ -9,5 +9,5 @@ let p = new Promise((resolve, reject) => {
     }
 })
 
-  p.then(message => {console.log(message)}).catch(error => {console.log(error)})
 });
+p.then(message => {console.log(message)}).catch(error => {console.log(error)})
