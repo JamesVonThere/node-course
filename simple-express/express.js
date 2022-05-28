@@ -6,7 +6,7 @@ app.get('/', (request, response, next) => {
 });
 
 app.get('/about', (request, response, next) => {
-    response.send("<h1>du gå</h1>");
+    response.send("<h1>du gå. He gåna</h1>");
 })
 
 app.listen(3001, () => {
