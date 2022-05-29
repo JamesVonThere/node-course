@@ -6,6 +6,9 @@ const app = express();
 
 const path = require('path');
 
+const cors = require('cors');
+app.use(cors());
+
 const mysql = require('mysql2');
 require('dotenv').config(); 
 
@@ -20,37 +23,43 @@ let pool = mysql
 })
     .promise();
 
-app.use('/', (request, response, next) => {
+app.use((request, response, next) => {
     console.log("a");
     next();
 })
 app.get('/', (request, response, next) => {
     console.log('df');
-    next();
-    // response.send('dfjhjk');
-});
-app.use('/', (request, response, next) => {
-    console.log("b");
     // next();
+    response.send('dfjhjk');
+});
+app.use((request, response, next) => {
+    console.log("b");
+    next();
     // response.send('dafdsfsfs');
 })
 
-app.get('/', (request, response, next) => {
+app.get('/about', (request, response, next) => {
     response.send('About Me');
 });
 
+app.get('/stocks', async (req, res, next) => {
+    let [data, fields] = await pool.execute('SELECT * FROM `stocks`');
+    res.json(data);
+})
+
 app.get('/stocks/:stockID', async (req, res, next) => {
 
-    console.log('get stocks by id' + id);
+    let id = req.params;
+    
+    console.log('get stocks by id ' + id);
 
-    let [data] = await pool.execute("SELECT * FROM stocks" + req.params.stockID);
+    let [data] = await pool.execute("SELECT * FROM stocks WHERE id = ?", [req.params.stockID]);
 
-    console.log('get stocks by id' + data);
+    // console.log('get stocks by id' + data);
 
     if (data.ength === 0) {
         res.status(404).json(data);
     }else{
-
         res.json(data);
     }
 
