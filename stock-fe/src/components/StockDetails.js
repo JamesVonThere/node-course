@@ -3,13 +3,33 @@ import { useState, useEffect } from "react";
 
 const StockDetails = () => {
   const [data, setData] = useState([]);
+
+  const [page, setPage] = useState(1);
+
+  const [lastPage, setLastPage] = useState(1);
   useEffect(() => {
     let getData = async () => {
-      let response = await axios.get("http://localhost:3001/stocks/2330");
+      let response = await axios.get("http://localhost:3001/stocks/2330", {
+        params: {
+          page: page,
+        },
+      });
       setData(response.data.data);
+
+      setLastPage(response.data.pagination.lastPage);
     };
     getData();
   }, []);
+
+
+  const getPages = () => {
+    let pages = [];
+    for(let i = 1; i <= lastPage; i++){
+      pages.push();
+    }
+    // pages.push(1);
+    // pages.push(2);
+  }
 
   return (
     <div>
