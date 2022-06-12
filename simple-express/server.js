@@ -8,10 +8,33 @@ const path = require("path");
 
 // 使用第三方開發的中間件 cors
 const cors = require("cors");
-app.use(cors());
+
 
 require("dotenv").config();
 let pool = require("./utils/db");
+app.use(express.json());
+const expressSession = require('express-session');
+let FileStore = require('session-file-store')(expressSession);
+
+app.use(
+  expressSession({
+    store: new FileStore({
+      path: path.join(__dirname, '..', 'sessions'),
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  })
+);
+app.use('/images/members', express.static(path.join(__dirname, 'public', 'members')));
+
 
 // client - server
 // client send request -------> server
@@ -44,8 +67,8 @@ app.set("view engine", "pug");
 // 方法1: 不要指定網址
 app.use(express.static(path.join(__dirname, "assets")));
 // http://localhost:3001/images/test1.jpg
-// 方法2: 指定網址 aaa
-app.use("/aaa", express.static(path.join(__dirname, "public")));
+// 方法2: 指定網址 public
+app.use("/public", express.static(path.join(__dirname, "public")));
 // http://localhost:3001/aaa/images/callback-hell.png
 
 // 一般中間件
@@ -105,6 +128,9 @@ app.use("/api/stocks", StockRouter);
 
 const AuthRouter = require("./routers/authRouter");
 app.use("/api/auth", AuthRouter);
+
+const MemberRouter = require('./routers/memberRouter');
+app.use("/api/member", MemberRouter);
 // 這個中間件在所有路由的後面
 // 會到這裡，表示前面所有的路由中間件都沒有比到符合的網址
 // => 404

@@ -13,11 +13,25 @@ const Register = () => {
   function handleChange(e) {
     setMember({ ...member, [e.target.name]: e.target.value });
   }
+
+  function handlePhoto(e) {
+    setMember({ ...member, photo: e.target.files[0] });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      let response = await axios.post(`${API_URL}/auth/register`, member);
-      console.log(response);
+      // let response = await axios.post(`${API_URL}/auth/register`, member);
+      // console.log(response);
+
+      let formData = new FormData();
+      formData.append('email', member.email);
+      formData.append('name', member.name);
+      formData.append('password', member.password);
+      formData.append('confirmPassword', member.confirmPassword);
+      formData.append('photo', member.photo);
+      let response = axios.post(`${API_URL}/auth/register`, formData);
+      console.log(response.data);
     } catch (e) {
       console.error(e);
     }
@@ -88,6 +102,7 @@ const Register = () => {
           type="file"
           id="photo"
           name="photo"
+          onChange={handlePhoto}
         />
       </div>
       <button

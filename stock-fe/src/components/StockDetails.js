@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { API_URL } from "../utils/config";
 
 const StockDetails = () => {
   const [data, setData] = useState([]);
@@ -7,9 +9,11 @@ const StockDetails = () => {
   const [page, setPage] = useState(1);
 
   const [lastPage, setLastPage] = useState(1);
+  const { stockId } = useParams();
   useEffect(() => {
     let getData = async () => {
-      let response = await axios.get("http://localhost:3001/stocks/2330", {
+      // let response = await axios.get("http://localhost:3001/api/stocks/2330", {
+      let response = await axios.get(`${API_URL}/stocks/${stockId}`, {
         params: {
           page: page,
         },
@@ -21,15 +25,14 @@ const StockDetails = () => {
     getData();
   }, []);
 
-
   const getPages = () => {
     let pages = [];
-    for(let i = 1; i <= lastPage; i++){
+    for (let i = 1; i <= lastPage; i++) {
       pages.push();
     }
     // pages.push(1);
     // pages.push(2);
-  }
+  };
 
   return (
     <div>
